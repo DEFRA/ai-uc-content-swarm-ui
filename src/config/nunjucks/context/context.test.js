@@ -60,7 +60,7 @@ describe('context and cache', () => {
               href: '/about'
             }
           ],
-          serviceName: 'cdp-node-frontend-template',
+          serviceName: 'ai-uc-content-swarm-ui',
           serviceUrl: '/'
         })
       })
@@ -149,7 +149,7 @@ describe('context and cache', () => {
               href: '/about'
             }
           ],
-          serviceName: 'cdp-node-frontend-template',
+          serviceName: 'ai-uc-content-swarm-ui',
           serviceUrl: '/'
         })
       })
