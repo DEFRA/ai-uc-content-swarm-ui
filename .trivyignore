@@ -7,3 +7,9 @@
 # CVE-2021-12345 exp:2023-12-31T23:59:59.000Z
 #
 # See https://trivy.dev/docs/latest/configuration/filtering/#trivyignore
+
+# Useragent: Regular Expression Denial of Service (ReDoS)
+# Reason: Workaround (truncate user-agent strings) implemented in application code. Waiting for upstream package fix.
+# Created: 2025-11-26T15:00:00.000Z
+# Expires: 2026-10-31T15:00:00.000Z
+CVE-2020-26311 exp:2026-10-31T15:00:00.000Z
