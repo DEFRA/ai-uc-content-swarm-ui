@@ -4,7 +4,7 @@ const routes = [
   {
     method: 'GET',
     path: '/guidance/new',
-    handler: guidanceController.getNewGuidanceForm
+    handler: guidanceController.getStartPage
   }
 ]
 

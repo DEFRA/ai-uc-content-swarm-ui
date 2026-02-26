@@ -1,12 +1,10 @@
-import { homeRouter } from './home/router.js'
-import { guidanceRouter } from './guidance/router.js'
+import { guidanceRouter } from './start/router.js'
 
 const pageRouter = {
   plugin: {
     name: 'pageRouter',
     async register (server) {
       await server.register([
-        homeRouter,
         guidanceRouter
       ])
     }
