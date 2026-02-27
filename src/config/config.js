@@ -45,7 +45,7 @@ const config = convict({
   serviceName: {
     doc: 'Applications Service Name',
     format: String,
-    default: 'ai-uc-content-swarm-ui'
+    default: 'AI Content Swarm Use Case'
   },
   root: {
     doc: 'Project root',

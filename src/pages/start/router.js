@@ -1,16 +1,16 @@
-import * as guidanceController from './controller.js'
+import * as startController from './controller.js'
 
 const routes = [
   {
     method: 'GET',
-    path: '/guidance/new',
-    handler: guidanceController.getStartPage
+    path: '/',
+    handler: startController.getStartPage
   }
 ]
 
-const guidanceRouter = {
+const startRouter = {
   plugin: {
-    name: 'guidanceRouter',
+    name: 'startRouter',
     register (server) {
       server.route(routes)
     }
@@ -18,5 +18,5 @@ const guidanceRouter = {
 }
 
 export {
-  guidanceRouter
+  startRouter
 }
