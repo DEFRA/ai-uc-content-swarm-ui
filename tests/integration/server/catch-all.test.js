@@ -21,7 +21,7 @@ describe('#catchAll integration', () => {
     })
 
     expect(result).toEqual(
-      expect.stringContaining('Page not found | ai-uc-content-swarm-ui')
+      expect.stringContaining('Page not found | AI Content Swarm Use Case')
     )
     expect(statusCode).toBe(statusCodes.HTTP_STATUS_NOT_FOUND)
   })
