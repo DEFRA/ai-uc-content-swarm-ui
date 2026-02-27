@@ -42,7 +42,7 @@ describe('views plugin', () => {
         expect.objectContaining({
           assetPath: '/public/assets',
           getAssetPath: expect.any(Function),
-          serviceName: 'ai-uc-content-swarm-ui'
+          serviceName: 'AI Content Swarm Use Case'
         })
       )
     })
@@ -56,7 +56,7 @@ describe('views plugin', () => {
     test('Should provide correct serviceName in context', async () => {
       const { viewPlugin } = await import('../../../../src/server/plugins/views.js')
 
-      expect(viewPlugin.options.context.serviceName).toBe('ai-uc-content-swarm-ui')
+      expect(viewPlugin.options.context.serviceName).toBe('AI Content Swarm Use Case')
     })
   })
 
