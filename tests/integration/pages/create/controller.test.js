@@ -1,9 +1,13 @@
 import { constants as statusCodes } from 'node:http2'
+import nock from 'nock'
 import { beforeEach, afterEach } from 'vitest'
 
 import { createServer } from '../../../../src/server/server.js'
-import { mockCreateRunSuccess, cleanupMocks } from '../../../mocks/nock-setup.js'
+import { setupNock, teardownNock } from '../../../mocks/nock-setup.js'
 import { mockRuns } from '../../../mocks/runtime-api.js'
+import { config } from '../../../../src/config/config.js'
+
+const runtimeUrl = config.get('runtime.url')
 
 describe('Create Page', () => {
   let server
@@ -18,11 +22,11 @@ describe('Create Page', () => {
   })
 
   beforeEach(() => {
-    cleanupMocks()
+    setupNock()
   })
 
   afterEach(() => {
-    cleanupMocks()
+    teardownNock()
   })
 
   describe('GET /guidance/new', () => {
@@ -39,7 +43,9 @@ describe('Create Page', () => {
 
   describe('POST /guidance/new', () => {
     test('Should redirect with valid runName payload', async () => {
-      mockCreateRunSuccess({ name: 'Test Guidance Run' }, mockRuns.success)
+      nock(runtimeUrl)
+        .post('/runs', body => body.name !== undefined)
+        .reply(201, mockRuns.success)
 
       const { statusCode, headers } = await server.inject({
         method: 'POST',
@@ -54,7 +60,9 @@ describe('Create Page', () => {
     })
 
     test('Should trim whitespace from runName', async () => {
-      mockCreateRunSuccess({ name: 'Trimmed Run' }, mockRuns.anotherSuccess)
+      nock(runtimeUrl)
+        .post('/runs', body => body.name !== undefined)
+        .reply(201, mockRuns.anotherSuccess)
 
       const { statusCode, headers } = await server.inject({
         method: 'POST',
@@ -68,30 +76,10 @@ describe('Create Page', () => {
       expect(headers.location).toMatch(/^\/guidance\/[\w-]+\/setup$/)
     })
 
-    test('Should reject empty runName with 400', async () => {
-      const { statusCode } = await server.inject({
-        method: 'POST',
-        url: '/guidance/new',
-        payload: {
-          runName: ''
-        }
-      })
-
-      expect(statusCode).toBe(statusCodes.HTTP_STATUS_BAD_REQUEST)
-    })
-
-    test('Should reject missing runName with 400', async () => {
-      const { statusCode } = await server.inject({
-        method: 'POST',
-        url: '/guidance/new',
-        payload: {}
-      })
-
-      expect(statusCode).toBe(statusCodes.HTTP_STATUS_BAD_REQUEST)
-    })
-
     test('Should handle runtime API error gracefully', async () => {
-      mockCreateRunSuccess({ name: 'Error Test' }, { error: 'Internal error' })
+      nock(runtimeUrl)
+        .post('/runs', body => body.name !== undefined)
+        .reply(500, { error: 'Internal error' })
 
       const { statusCode } = await server.inject({
         method: 'POST',

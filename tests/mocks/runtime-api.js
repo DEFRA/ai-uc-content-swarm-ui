@@ -1,9 +1,4 @@
-/**
- * Mock responses for runtime API
- * Used with nock for HTTP mocking in tests
- */
-
-export const mockRuns = {
+const mockRuns = {
   success: {
     id: 'run-123-abc',
     name: 'Test Guidance Run',
@@ -18,7 +13,7 @@ export const mockRuns = {
   }
 }
 
-export const mockContexts = {
+const mockContexts = {
   empty: [],
   withDocuments: [
     {
@@ -36,7 +31,7 @@ export const mockContexts = {
   ]
 }
 
-export const mockUploadSession = {
+const mockUploadSession = {
   success: {
     upload_id: 'upload-789-xyz',
     runId: 'run-123-abc',
@@ -45,7 +40,7 @@ export const mockUploadSession = {
   }
 }
 
-export const mockErrors = {
+const mockErrors = {
   serverError: {
     error: 'Internal Server Error',
     message: 'An unexpected error occurred'
@@ -58,4 +53,11 @@ export const mockErrors = {
     error: 'Not Found',
     message: 'Run not found'
   }
+}
+
+export {
+  mockRuns,
+  mockContexts,
+  mockUploadSession,
+  mockErrors
 }

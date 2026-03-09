@@ -1,9 +1,13 @@
 import { constants as statusCodes } from 'node:http2'
+import nock from 'nock'
 import { beforeEach, afterEach } from 'vitest'
 
 import { createServer } from '../../../../src/server/server.js'
-import { mockInitiateContextUploadSuccess, mockGetRunContextsSuccess, cleanupMocks } from '../../../mocks/nock-setup.js'
-import { mockUploadSession, mockContexts } from '../../../mocks/runtime-api.js'
+import { setupNock, teardownNock } from '../../../mocks/nock-setup.js'
+import { mockUploadSession, mockRuns, mockContexts } from '../../../mocks/runtime-api.js'
+import { config } from '../../../../src/config/config.js'
+
+const runtimeUrl = config.get('runtime.url')
 
 describe('Guidance Page', () => {
   let server
@@ -18,24 +22,26 @@ describe('Guidance Page', () => {
   })
 
   beforeEach(() => {
-    cleanupMocks()
+    setupNock()
   })
 
   afterEach(() => {
-    cleanupMocks()
+    teardownNock()
   })
 
   describe('POST /guidance/{runId}/upload/initiate', () => {
     test('Should initiate upload with valid metadata', async () => {
       const runId = 'test-run-123'
-      mockInitiateContextUploadSuccess(runId, mockUploadSession.success)
+      nock(runtimeUrl)
+        .post(`/runs/${runId}/contexts`, body => body !== null && typeof body === 'object')
+        .reply(201, mockUploadSession.success)
 
       const { statusCode } = await server.inject({
         method: 'POST',
         url: `/guidance/${runId}/upload/initiate`,
         payload: {
-          filename: 'test-document.pdf',
-          mimeType: 'application/pdf'
+          title: 'Test Document',
+          description: 'A test document'
         }
       })
 
@@ -46,7 +52,9 @@ describe('Guidance Page', () => {
   describe('GET /guidance/{runId}/upload/metadata', () => {
     test('Should return 200 OK and render context/metadata form', async () => {
       const runId = 'test-run-123'
-      mockGetRunContextsSuccess(runId, mockContexts.empty)
+      nock(runtimeUrl)
+        .get(`/runs/${runId}`)
+        .reply(200, mockRuns.success)
 
       const { statusCode, payload } = await server.inject({
         method: 'GET',

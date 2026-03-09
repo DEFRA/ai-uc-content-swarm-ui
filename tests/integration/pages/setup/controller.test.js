@@ -1,8 +1,13 @@
 import { constants as statusCodes } from 'node:http2'
+import nock from 'nock'
 import { beforeEach, afterEach } from 'vitest'
 
 import { createServer } from '../../../../src/server/server.js'
-import { cleanupMocks } from '../../../mocks/nock-setup.js'
+import { setupNock, teardownNock } from '../../../mocks/nock-setup.js'
+import { mockRuns, mockContexts } from '../../../mocks/runtime-api.js'
+import { config } from '../../../../src/config/config.js'
+
+const runtimeUrl = config.get('runtime.url')
 
 describe('Setup Page', () => {
   let server
@@ -17,18 +22,27 @@ describe('Setup Page', () => {
   })
 
   beforeEach(() => {
-    cleanupMocks()
+    setupNock()
   })
 
   afterEach(() => {
-    cleanupMocks()
+    teardownNock()
   })
 
   describe('GET /guidance/{runId}/setup', () => {
     test('Should return 200 OK and render setup page', async () => {
+      const runId = 'test-run-123'
+      nock(runtimeUrl)
+        .get(`/runs/${runId}`)
+        .reply(200, mockRuns.success)
+
+      nock(runtimeUrl)
+        .get(`/runs/${runId}/contexts`)
+        .reply(200, mockContexts.empty)
+
       const { statusCode, payload } = await server.inject({
         method: 'GET',
-        url: '/guidance/test-run-123/setup'
+        url: `/guidance/${runId}/setup`
       })
 
       expect(statusCode).toBe(statusCodes.HTTP_STATUS_OK)

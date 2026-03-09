@@ -23,12 +23,19 @@ function showCreateForm (_request, h) {
  * @param {import('@hapi/hapi').Request} request - Hapi request object with validated runName in payload
  * @param {import('@hapi/hapi').ResponseToolkit} h - Hapi response toolkit
  *
- * @returns {import('@hapi/hapi').ResponseObject} Redirect to run setup page
+ * @returns {import('@hapi/hapi').ResponseObject} Redirect to run setup page or error
  */
 async function createRun (request, h) {
   const { runName } = request.payload
 
   const response = await runsApi.createRun({ name: runName.trim() })
+
+  if (!response || !response.id) {
+    return h.view('common/error', {
+      statusCode: 500,
+      message: 'Failed to create run: invalid response from runtime API'
+    }).code(500)
+  }
 
   return h.redirect(`/guidance/${response.id}/setup`)
     .code(statusCodes.HTTP_STATUS_FOUND)

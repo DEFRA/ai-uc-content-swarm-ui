@@ -7,9 +7,11 @@ const createRunSchema = Joi.object({
   runName: Joi.string()
     .required()
     .trim()
+    .min(1)
     .messages({
       'string.empty': 'Run name is required',
-      'any.required': 'Run name is required'
+      'any.required': 'Run name is required',
+      'string.min': 'Run name is required'
     })
 })
 

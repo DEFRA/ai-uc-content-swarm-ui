@@ -18,28 +18,6 @@
         <!-- Upload form -->
         <form id="upload-form" class="govuk-!-margin-top-6" action="{{ uploadAction }}" method="post" enctype="multipart/form-data">
           <div class="govuk-form-group">
-            <label class="govuk-label govuk-label--l" for="document-type">
-              Type of content
-            </label>
-            <div class="govuk-hint" id="document-type-hint">
-              Select the category that best describes the documents you are uploading
-            </div>
-            <select
-              class="govuk-select"
-              id="document-type"
-              name="documentType"
-              aria-describedby="document-type-hint"
-              required
-            >
-              <option value="">Select a type</option>
-              <option value="legislation">Legislation &amp; policy references</option>
-              <option value="guidance">Existing guidance or procedures</option>
-              <option value="background">Background information</option>
-              <option value="other">Other supporting materials</option>
-            </select>
-          </div>
-
-          <div class="govuk-form-group">
             <label class="govuk-label govuk-label--l" for="file-upload">
               Choose file
             </label>
