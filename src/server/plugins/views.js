@@ -1,6 +1,8 @@
 import path from 'node:path'
 import fs from 'node:fs'
 
+import { format } from 'date-fns'
+
 import hapiVision from '@hapi/vision'
 import nunjucks from 'nunjucks'
 
@@ -18,6 +20,13 @@ const nunjucksEnvironment = nunjucks.configure(
     lstripBlocks: true
   }
 )
+
+// Add custom filters
+nunjucksEnvironment.addFilter('dateFilter', (date) => {
+  if (!date) return ''
+  const parsedDate = new Date(date)
+  return format(parsedDate, 'dd MMMM yyyy HH:mm')
+})
 
 const assetPath = config.get('assetPath')
 

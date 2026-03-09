@@ -22,4 +22,14 @@ describe('Start Page', () => {
 
     expect(statusCode).toBe(statusCodes.HTTP_STATUS_OK)
   })
+
+  test('Should render the start page template', async () => {
+    const { statusCode, payload } = await server.inject({
+      method: 'GET',
+      url: '/'
+    })
+
+    expect(statusCode).toBe(statusCodes.HTTP_STATUS_OK)
+    expect(payload).toBeTruthy()
+  })
 })

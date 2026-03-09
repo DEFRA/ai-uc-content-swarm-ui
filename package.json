@@ -13,7 +13,7 @@
     "build:watch": "NODE_ENV=development webpack --watch",
     "start": "NODE_ENV=production node --use-strict ./src/index.js",
     "start:dev": "NODE_ENV=development run-p build:watch server:watch",
-    "server:watch": "nodemon --watch src --ext js,njk --ignore src/client --exec 'node --use-strict ./src/index.js'",
+    "server:watch": "nodemon --env-file-if-exists=.env --watch src --watch .public --ext js,njk,yaml,json --ignore src/client --exec 'node --env-file-if-exists=.env --use-strict ./src/index.js'",
     "lint": "run-s lint:js lint:scss",
     "lint:js": "eslint .",
     "lint:scss": "stylelint \"src/**/*.scss\" --cache --cache-location .cache/stylelint --cache-strategy content --color --ignore-path .gitignore",
@@ -46,6 +46,7 @@
     "hapi-pino": "13.0.0",
     "hapi-pulse": "3.0.1",
     "ioredis": "5.8.2",
+    "joi": "18.0.2",
     "lodash": "4.17.23",
     "node-fetch": "3.3.2",
     "nunjucks": "3.2.4",
@@ -62,6 +63,7 @@
     "copy-webpack-plugin": "13.0.1",
     "eslint": "9.39.2",
     "neostandard": "0.12.2",
+    "nock": "14.0.11",
     "nodemon": "3.1.11",
     "npm-run-all2": "8.0.4",
     "postcss-load-config": "6.0.1",
@@ -80,6 +82,8 @@
   },
   "overrides": {
     "tmp": "0.2.5",
-    "minimatch": "10.2.4"
+    "serialize-javascript": "7.0.3",
+    "svgo": "4.0.1",
+    "immutable": "5.1.5"
   }
 }

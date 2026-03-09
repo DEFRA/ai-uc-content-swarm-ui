@@ -1,0 +1,71 @@
+{% extends "common/layout.njk" %}
+
+{% block title %}
+  <title>Document metadata - {{ serviceName }}</title>
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <a href="/guidance/{{ run.id }}/setup" class="govuk-back-link">Back</a>
+
+        <h1 class="govuk-heading-xl">Add document information</h1>
+
+        <p class="govuk-body">
+          Before uploading, please provide information about the document you are adding to: <strong>{{ run.name }}</strong>
+        </p>
+
+        <form method="post" action="/guidance/{{ run.id }}/upload/initiate" class="govuk-!-margin-top-6">
+          <div class="govuk-form-group{% if errors and errors.title %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label govuk-label--l" for="title">
+              Document title
+            </label>
+            <div class="govuk-hint" id="title-hint">
+              A brief title or subject for this document
+            </div>
+            {% if errors and errors.title %}
+              <p class="govuk-error-message" id="title-error">
+                <span class="govuk-visually-hidden">Error:</span> {{ errors.title }}
+              </p>
+            {% endif %}
+            <input
+              class="govuk-input{% if errors and errors.title %} govuk-input--error{% endif %}"
+              id="title"
+              name="title"
+              type="text"
+              aria-describedby="title-hint{% if errors and errors.title %} title-error{% endif %}"
+              maxlength="255"
+              required
+            />
+          </div>
+
+          <div class="govuk-form-group">
+            <label class="govuk-label govuk-label--l" for="description">
+              Description (optional)
+            </label>
+            <div class="govuk-hint" id="description-hint">
+              Additional context about the document or why you are adding it
+            </div>
+            <textarea
+              class="govuk-textarea"
+              id="description"
+              name="description"
+              aria-describedby="description-hint"
+              rows="5"
+              maxlength="1000"
+            ></textarea>
+          </div>
+
+          <div class="govuk-form-group">
+            <button type="submit" class="govuk-button" data-module="govuk-button">
+              Continue to upload
+            </button>
+          </div>
+        </form>
+
+        <p class="govuk-body govuk-!-margin-top-9">
+          <a href="/" class="govuk-link">Back to start</a>
+        </p>
+      </div>
+    </div>
+{% endblock %}

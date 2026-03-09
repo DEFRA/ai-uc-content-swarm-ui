@@ -4,6 +4,10 @@ const mockReadFileSync = vi.fn()
 const mockNunjucksConfigure = vi.fn()
 const mockNunjucksCompile = vi.fn()
 
+const mockNunjucksEnvironment = {
+  addFilter: vi.fn(),
+}
+
 vi.mock('node:fs', () => ({
   default: {
     readFileSync: mockReadFileSync
@@ -32,7 +36,7 @@ describe('views plugin', () => {
         'stylesheets/application.scss': 'stylesheets/application.xyz789.css'
       }))
 
-      mockNunjucksConfigure.mockReturnValue({})
+      mockNunjucksConfigure.mockReturnValue(mockNunjucksEnvironment)
     })
 
     test('Should provide correct context properties', async () => {
@@ -62,7 +66,7 @@ describe('views plugin', () => {
 
   describe('Webpack manifest handling', () => {
     beforeEach(() => {
-      mockNunjucksConfigure.mockReturnValue({})
+      mockNunjucksConfigure.mockReturnValue(mockNunjucksEnvironment)
     })
 
     test('Should read webpack manifest file', async () => {
@@ -95,7 +99,7 @@ describe('views plugin', () => {
 
   describe('getAssetPath function', () => {
     beforeEach(() => {
-      mockNunjucksConfigure.mockReturnValue({})
+      mockNunjucksConfigure.mockReturnValue(mockNunjucksEnvironment)
     })
 
     test('Should return versioned asset path when asset exists in manifest', async () => {
@@ -135,7 +139,7 @@ describe('views plugin', () => {
   describe('Template compilation', () => {
     beforeEach(() => {
       mockReadFileSync.mockReturnValue(JSON.stringify({}))
-      mockNunjucksConfigure.mockReturnValue({})
+      mockNunjucksConfigure.mockReturnValue(mockNunjucksEnvironment)
     })
 
     test('Should compile templates with nunjucks environment', async () => {
