@@ -33,7 +33,7 @@ const mockContexts = {
 
 const mockUploadSession = {
   success: {
-    upload_id: 'upload-789-xyz',
+    uploadId: 'upload-789-xyz',
     runId: 'run-123-abc',
     status: 'initiated',
     initiatedAt: '2026-03-09T10:30:00Z'

@@ -6,10 +6,10 @@
  *
  * @returns {Object} The view data object
  */
-function CreateViewModel ({ errors } = {}) {
+function createNewRunViewModel ({ errors } = {}) {
   return { errors }
 }
 
 export {
-  CreateViewModel
+  createNewRunViewModel
 }

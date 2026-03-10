@@ -3,8 +3,8 @@ import Boom from '@hapi/boom'
 import { statusCodes } from '../../../constants/status-codes.js'
 
 import * as runsApi from '../../../infra/api/runtime.js'
-import { ContextViewModel } from './view-model.js'
-import { validate } from './schema.js'
+import { extractValidationErrors } from '../../common/error-utils.js'
+import { createContextViewModel } from './view-model.js'
 
 /**
  * Show the metadata collection form for uploading a context document
@@ -18,7 +18,7 @@ async function showContextForm (request, h) {
   const { runId } = request.params
   const run = await runsApi.getRun(runId)
 
-  const viewData = new ContextViewModel({ run })
+  const viewData = createContextViewModel({ run })
   return h.view('guidance/context/context-collect', viewData)
     .code(statusCodes.HTTP_STATUS_OK)
 }
@@ -62,18 +62,14 @@ async function initiateUpload (request, h) {
  * @returns {import('@hapi/hapi').ResponseObject} Response with error view
  */
 async function handleValidationError (request, h, error) {
-  if (error.isJoi) {
-    const { runId } = request.params
-    const [, errors] = validate(request.payload)
+  const { runId } = request.params
+  const errors = extractValidationErrors(error)
 
-    const run = await runsApi.getRun(runId)
+  const run = await runsApi.getRun(runId)
 
-    return h.view('guidance/context/context-collect', new ContextViewModel({ run, errors }))
-      .code(400)
-      .takeover()
-  }
-
-  throw error
+  return h.view('guidance/context/context-collect', createContextViewModel({ run, errors }))
+    .code(statusCodes.HTTP_STATUS_BAD_REQUEST)
+    .takeover()
 }
 
 export {

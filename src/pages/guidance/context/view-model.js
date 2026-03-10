@@ -7,10 +7,10 @@
  *
  * @returns {Object} The view data object
  */
-function ContextViewModel ({ run, errors } = {}) {
+function createContextViewModel ({ run, errors } = {}) {
   return { run, errors }
 }
 
 export {
-  ContextViewModel
+  createContextViewModel
 }

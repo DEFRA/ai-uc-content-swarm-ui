@@ -1,7 +1,7 @@
 import { statusCodes } from '../../../constants/status-codes.js'
 
 import * as runsApi from '../../../infra/api/runtime.js'
-import { SetupViewModel } from './view-model.js'
+import { createSetupViewModel } from './view-model.js'
 
 /**
  * Show run setup page with context management
@@ -13,10 +13,11 @@ import { SetupViewModel } from './view-model.js'
  */
 async function showSetup (request, h) {
   const { runId } = request.params
+
   const run = await runsApi.getRun(runId)
   const contexts = await runsApi.getRunContexts(runId)
 
-  const viewData = new SetupViewModel({ run, contexts })
+  const viewData = createSetupViewModel({ run, contexts })
 
   return h.view('guidance/setup/setup', viewData)
     .code(statusCodes.HTTP_STATUS_OK)

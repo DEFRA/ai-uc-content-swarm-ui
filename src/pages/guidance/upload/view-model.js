@@ -7,10 +7,10 @@
  *
  * @returns {Object} The view data object
  */
-function UploadViewModel ({ run, uploadAction } = {}) {
+function createUploadViewModel ({ run, uploadAction } = {}) {
   return { run, uploadAction }
 }
 
 export {
-  UploadViewModel
+  createUploadViewModel
 }

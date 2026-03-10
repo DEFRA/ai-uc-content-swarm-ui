@@ -46,6 +46,7 @@ async function getRun (runId) {
   if (!response.ok) {
     const error = new Error(`Failed to get run: ${response.statusText}`)
     error.statusCode = response.status
+
     throw error
   }
 
@@ -97,15 +98,11 @@ async function initiateContextUpload (runId, requestPayload) {
   if (!response.ok) {
     const error = new Error(`Failed to initiate upload: ${response.statusText}`)
     error.statusCode = response.status
+
     throw error
   }
 
-  const json = await response.json()
-  // Normalize snake_case upload_id to camelCase uploadId for consumers
-  if (json && json.upload_id && !json.uploadId) {
-    json.uploadId = json.upload_id
-  }
-  return json
+  return await response.json()
 }
 
 export {

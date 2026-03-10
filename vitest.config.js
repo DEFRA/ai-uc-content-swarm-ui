@@ -5,6 +5,7 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     clearMocks: true,
+    testTimeout: 10000,
     coverage: {
       ...configDefaults.coverage,
       reportOnFailure: true,

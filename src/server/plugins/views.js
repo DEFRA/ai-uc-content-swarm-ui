@@ -23,7 +23,10 @@ const nunjucksEnvironment = nunjucks.configure(
 
 // Add custom filters
 nunjucksEnvironment.addFilter('dateFilter', (date) => {
-  if (!date) return ''
+  if (!date) {
+    return ''
+  }
+
   const parsedDate = new Date(date)
   return format(parsedDate, 'dd MMMM yyyy HH:mm')
 })

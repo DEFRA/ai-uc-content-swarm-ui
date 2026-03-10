@@ -1,6 +1,6 @@
 import { constants as statusCodes } from 'node:http2'
+
 import nock from 'nock'
-import { beforeEach, afterEach } from 'vitest'
 
 import { createServer } from '../../../../src/server/server.js'
 import { setupNock, teardownNock } from '../../../mocks/nock-setup.js'

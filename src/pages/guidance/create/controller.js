@@ -1,8 +1,8 @@
 import { statusCodes } from '../../../constants/status-codes.js'
 
 import * as runsApi from '../../../infra/api/runtime.js'
-import { CreateViewModel } from './view-model.js'
-import { validate } from './schema.js'
+import { extractValidationErrors } from '../../common/error-utils.js'
+import { createNewRunViewModel } from './view-model.js'
 
 /**
  * Show create run form
@@ -13,7 +13,7 @@ import { validate } from './schema.js'
  * @returns {import('@hapi/hapi').ResponseObject} The response object for the guidance creation form
  */
 function showCreateForm (_request, h) {
-  const viewData = new CreateViewModel({})
+  const viewData = createNewRunViewModel({})
   return h.view('guidance/create/page', viewData)
     .code(statusCodes.HTTP_STATUS_OK)
 }
@@ -47,10 +47,10 @@ async function createRun (request, h) {
  */
 function handleValidationError (_request, h, error) {
   if (error.isJoi) {
-    const [, errors] = validate(_request.payload)
+    const errors = extractValidationErrors(error)
 
-    return h.view('guidance/create/page', new CreateViewModel({ errors }))
-      .code(400)
+    return h.view('guidance/create/page', createNewRunViewModel({ errors }))
+      .code(statusCodes.HTTP_STATUS_BAD_REQUEST)
       .takeover()
   }
 
