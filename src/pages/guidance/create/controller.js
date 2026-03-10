@@ -1,7 +1,8 @@
 import { statusCodes } from '../../../constants/status-codes.js'
 
 import * as runsApi from '../../../infra/api/runtime.js'
-import { buildCreateView, formatValidationErrors } from './view-model.js'
+import { CreateViewModel } from './view-model.js'
+import { validate } from './schema.js'
 
 /**
  * Show create run form
@@ -12,7 +13,7 @@ import { buildCreateView, formatValidationErrors } from './view-model.js'
  * @returns {import('@hapi/hapi').ResponseObject} The response object for the guidance creation form
  */
 function showCreateForm (_request, h) {
-  const viewData = buildCreateView({})
+  const viewData = new CreateViewModel({})
   return h.view('guidance/create/page', viewData)
     .code(statusCodes.HTTP_STATUS_OK)
 }
@@ -28,14 +29,7 @@ function showCreateForm (_request, h) {
 async function createRun (request, h) {
   const { runName } = request.payload
 
-  const response = await runsApi.createRun({ name: runName.trim() })
-
-  if (!response || !response.id) {
-    return h.view('common/error', {
-      statusCode: 500,
-      message: 'Failed to create run: invalid response from runtime API'
-    }).code(500)
-  }
+  const response = await runsApi.createRun({ name: runName })
 
   return h.redirect(`/guidance/${response.id}/setup`)
     .code(statusCodes.HTTP_STATUS_FOUND)
@@ -51,12 +45,13 @@ async function createRun (request, h) {
  *
  * @returns {import('@hapi/hapi').ResponseObject} Response with error view
  */
-function handleValidationError (request, h, error) {
+function handleValidationError (_request, h, error) {
   if (error.isJoi) {
-    const errors = formatValidationErrors(error)
+    const [, errors] = validate(_request.payload)
 
-    return h.view('guidance/create/page', buildCreateView({ errors }))
+    return h.view('guidance/create/page', new CreateViewModel({ errors }))
       .code(400)
+      .takeover()
   }
 
   throw error

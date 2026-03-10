@@ -1,7 +1,10 @@
+import Boom from '@hapi/boom'
+
 import { statusCodes } from '../../../constants/status-codes.js'
 
 import * as runsApi from '../../../infra/api/runtime.js'
-import { buildContextCollectView, formatValidationErrors } from './view-model.js'
+import { ContextViewModel } from './view-model.js'
+import { validate } from './schema.js'
 
 /**
  * Show the metadata collection form for uploading a context document
@@ -15,7 +18,7 @@ async function showContextForm (request, h) {
   const { runId } = request.params
   const run = await runsApi.getRun(runId)
 
-  const viewData = buildContextCollectView({ run })
+  const viewData = new ContextViewModel({ run })
   return h.view('guidance/context/context-collect', viewData)
     .code(statusCodes.HTTP_STATUS_OK)
 }
@@ -38,13 +41,10 @@ async function initiateUpload (request, h) {
     redirect: `/guidance/${runId}/setup`
   })
 
-  const uploadId = response && (response.upload_id || response.uploadId)
+  const uploadId = response?.uploadId
 
   if (!uploadId) {
-    return h.view('common/error', {
-      statusCode: 500,
-      message: 'Failed to obtain upload id'
-    }).code(statusCodes.HTTP_STATUS_INTERNAL_SERVER_ERROR)
+    return Boom.internal('Failed to initiate upload session')
   }
 
   return h.redirect(`/guidance/${runId}/upload?uploadId=${uploadId}`)
@@ -64,11 +64,13 @@ async function initiateUpload (request, h) {
 async function handleValidationError (request, h, error) {
   if (error.isJoi) {
     const { runId } = request.params
-    const errors = formatValidationErrors(error)
+    const [, errors] = validate(request.payload)
 
     const run = await runsApi.getRun(runId)
-    return h.view('guidance/context/context-collect', buildContextCollectView({ run, errors }))
+
+    return h.view('guidance/context/context-collect', new ContextViewModel({ run, errors }))
       .code(400)
+      .takeover()
   }
 
   throw error

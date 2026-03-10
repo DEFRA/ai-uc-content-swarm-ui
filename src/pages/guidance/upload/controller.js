@@ -2,7 +2,7 @@ import { statusCodes } from '../../../constants/status-codes.js'
 import { config } from '../../../config/config.js'
 
 import * as runsApi from '../../../infra/api/runtime.js'
-import { buildUploadView } from './view-model.js'
+import { UploadViewModel } from './view-model.js'
 
 /**
  * Show the upload form for a run
@@ -25,7 +25,7 @@ async function showUploadForm (request, h) {
   const uploaderBase = config.get('uploader.url')
   const uploadAction = `${String(uploaderBase).replace(/\/$/, '')}/upload-and-scan/${queryUploadId}`
 
-  const viewData = buildUploadView({ run, uploadAction })
+  const viewData = new UploadViewModel({ run, uploadAction })
   return h.view('guidance/upload/upload', viewData)
     .code(statusCodes.HTTP_STATUS_OK)
 }

@@ -45,7 +45,99 @@ describe('Guidance Page', () => {
         }
       })
 
-      expect(statusCode).toBeLessThan(400) // Expect success (2xx or 3xx)
+      expect(statusCode).toBeLessThan(400)
+    })
+
+    test('Should fail validation with missing title', async () => {
+      const runId = 'test-run-123'
+      nock(runtimeUrl)
+        .get(`/runs/${runId}`)
+        .reply(200, mockRuns.success)
+
+      const { statusCode, payload } = await server.inject({
+        method: 'POST',
+        url: `/guidance/${runId}/upload/initiate`,
+        payload: {
+          description: 'A description without title'
+        }
+      })
+
+      expect(statusCode).toBe(400)
+      expect(payload).toContain('Document title is required')
+    })
+
+    test('Should fail validation with empty title', async () => {
+      const runId = 'test-run-123'
+      nock(runtimeUrl)
+        .get(`/runs/${runId}`)
+        .reply(200, mockRuns.success)
+
+      const { statusCode, payload } = await server.inject({
+        method: 'POST',
+        url: `/guidance/${runId}/upload/initiate`,
+        payload: {
+          title: '',
+          description: 'A description'
+        }
+      })
+
+      expect(statusCode).toBe(400)
+      expect(payload).toContain('Document title is required')
+    })
+
+    test('Should fail validation with whitespace-only title', async () => {
+      const runId = 'test-run-123'
+      nock(runtimeUrl)
+        .get(`/runs/${runId}`)
+        .reply(200, mockRuns.success)
+
+      const { statusCode, payload } = await server.inject({
+        method: 'POST',
+        url: `/guidance/${runId}/upload/initiate`,
+        payload: {
+          title: '   ',
+          description: 'A description'
+        }
+      })
+
+      expect(statusCode).toBe(400)
+      expect(payload).toContain('Document title is required')
+    })
+
+    test('Should allow empty description', async () => {
+      const runId = 'test-run-123'
+      nock(runtimeUrl)
+        .post(`/runs/${runId}/contexts`, body => body !== null && typeof body === 'object')
+        .reply(201, { id: 'context-456', uploadId: 'upload-789' })
+
+      const { statusCode } = await server.inject({
+        method: 'POST',
+        url: `/guidance/${runId}/upload/initiate`,
+        payload: {
+          title: 'Test Title',
+          description: ''
+        }
+      })
+
+      expect(statusCode).toBeLessThan(400)
+    })
+
+    test('Should include form template in error response', async () => {
+      const runId = 'test-run-123'
+      nock(runtimeUrl)
+        .get(`/runs/${runId}`)
+        .reply(200, mockRuns.success)
+
+      const { statusCode, payload } = await server.inject({
+        method: 'POST',
+        url: `/guidance/${runId}/upload/initiate`,
+        payload: {
+          title: ''
+        }
+      })
+
+      expect(statusCode).toBe(400)
+      expect(payload).toContain('form')
     })
   })
 

@@ -100,7 +100,12 @@ async function initiateContextUpload (runId, requestPayload) {
     throw error
   }
 
-  return response.json()
+  const json = await response.json()
+  // Normalize snake_case upload_id to camelCase uploadId for consumers
+  if (json && json.upload_id && !json.uploadId) {
+    json.uploadId = json.upload_id
+  }
+  return json
 }
 
 export {

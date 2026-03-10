@@ -20,3 +20,21 @@ const metadataSchema = Joi.object({
 export {
   metadataSchema
 }
+
+function validate (payload) {
+  const { error, value } = metadataSchema.validate(payload, { abortEarly: false, allowUnknown: false })
+
+  if (!error) {
+    return [value, null]
+  }
+
+  const errors = {}
+  error.details.forEach(detail => {
+    const field = detail.context.key
+    errors[field] = detail.message
+  })
+
+  return [null, errors]
+}
+
+export { validate }

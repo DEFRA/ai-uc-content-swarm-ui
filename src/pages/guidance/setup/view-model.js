@@ -7,13 +7,10 @@
  *
  * @returns {Object} The view data object
  */
-function buildSetupView ({ run, contexts }) {
-  return {
-    run,
-    contexts
-  }
+function SetupViewModel ({ run, contexts } = {}) {
+  return { run, contexts }
 }
 
 export {
-  buildSetupView
+  SetupViewModel
 }

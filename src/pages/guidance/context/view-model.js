@@ -1,21 +1,4 @@
 /**
- * Convert Joi validation errors to template error format
- * Converts `[{ path: ['title'], message: '...' }]` to `{ title: '...' }`
- *
- * @param {Object} joiError - Joi ValidationError object
- *
- * @returns {Object} Error object keyed by field name
- */
-function formatValidationErrors (joiError) {
-  const errors = {}
-  joiError.details.forEach(detail => {
-    const field = detail.context.key
-    errors[field] = detail.message
-  })
-  return errors
-}
-
-/**
  * Build the view data for the context-collect page
  *
  * @param {Object} options - View model options
@@ -24,14 +7,10 @@ function formatValidationErrors (joiError) {
  *
  * @returns {Object} The view data object
  */
-function buildContextCollectView ({ run, errors }) {
-  return {
-    run,
-    ...(errors && { errors })
-  }
+function ContextViewModel ({ run, errors } = {}) {
+  return { run, errors }
 }
 
 export {
-  formatValidationErrors,
-  buildContextCollectView
+  ContextViewModel
 }
