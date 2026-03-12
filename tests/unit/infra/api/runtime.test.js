@@ -1,4 +1,73 @@
+import { describe, it, expect, beforeEach, vi } from 'vitest'
+import {
+  createRun,
+  getRun,
+  getRunContexts,
+  initiateContextUpload
+} from '../../../../src/infra/api/runtime.js'
 import * as runsApi from '../../../../src/infra/api/runtime.js'
+
+describe('src/infra/api/runtime.js - unhappy / 204 cases', () => {
+  beforeEach(() => {
+    global.fetch = vi.fn()
+  })
+
+  it('createRun throws when response is not ok', async () => {
+    global.fetch.mockResolvedValue({
+      ok: false,
+      status: 500,
+      statusText: 'Internal Server Error',
+      json: async () => ({})
+    })
+
+    await expect(createRun({ name: 'test' })).rejects.toThrow('Failed to create run')
+  })
+
+  it('getRun throws and sets statusCode on non-ok response', async () => {
+    global.fetch.mockResolvedValue({
+      ok: false,
+      status: 404,
+      statusText: 'Not Found',
+      json: async () => ({})
+    })
+
+    await expect(getRun('run-1')).rejects.toMatchObject({ statusCode: 404 })
+  })
+
+  it('getRunContexts returns [] when runtime responds 204 No Content', async () => {
+    global.fetch.mockResolvedValue({
+      ok: true,
+      status: 204,
+      statusText: 'No Content',
+      json: async () => []
+    })
+
+    const res = await getRunContexts('run-1')
+    expect(res).toEqual([])
+  })
+
+  it('getRunContexts throws and sets statusCode on non-ok response', async () => {
+    global.fetch.mockResolvedValue({
+      ok: false,
+      status: 500,
+      statusText: 'Server Error',
+      json: async () => ({})
+    })
+
+    await expect(getRunContexts('run-1')).rejects.toMatchObject({ statusCode: 500 })
+  })
+
+  it('initiateContextUpload throws on non-ok response', async () => {
+    global.fetch.mockResolvedValue({
+      ok: false,
+      status: 400,
+      statusText: 'Bad Request',
+      json: async () => ({})
+    })
+
+    await expect(initiateContextUpload('run-1', { redirect: null })).rejects.toMatchObject({ statusCode: 400 })
+  })
+})
 
 global.fetch = vi.fn()
 
@@ -44,7 +113,7 @@ describe('Runtime API', () => {
       const callArgs = global.fetch.mock.calls[0]
       const bodyText = callArgs[1].body
       const parsedBody = JSON.parse(bodyText)
-      // The API passes the payload as-is; trimming is done by the controller
+
       expect(parsedBody.name).toBe('  Untrimmed  ')
     })
 

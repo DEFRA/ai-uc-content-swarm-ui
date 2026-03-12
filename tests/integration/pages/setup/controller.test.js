@@ -1,4 +1,5 @@
 import { constants as statusCodes } from 'node:http2'
+
 import nock from 'nock'
 import { beforeEach, afterEach } from 'vitest'
 
@@ -32,13 +33,14 @@ describe('Setup Page', () => {
   describe('GET /guidance/{runId}/setup', () => {
     test('Should return 200 OK and render setup page', async () => {
       const runId = 'test-run-123'
+
       nock(runtimeUrl)
         .get(`/runs/${runId}`)
         .reply(200, mockRuns.success)
 
       nock(runtimeUrl)
         .get(`/runs/${runId}/contexts`)
-        .reply(200, mockContexts.empty)
+        .reply(200, mockContexts.withDocuments)
 
       const { statusCode, payload } = await server.inject({
         method: 'GET',
@@ -47,6 +49,8 @@ describe('Setup Page', () => {
 
       expect(statusCode).toBe(statusCodes.HTTP_STATUS_OK)
       expect(payload).toBeTruthy()
+
+      expect(payload).toContain('9 March 2026 10:15')
     })
   })
 })

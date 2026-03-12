@@ -71,7 +71,10 @@ async function getRunContexts (runId) {
   })
 
   if (!response.ok) {
-    throw new Error(`Failed to get run contexts: ${response.statusText}`)
+    const error = new Error(`Failed to get run contexts: ${response.statusText}`)
+    error.statusCode = response.status
+
+    throw error
   }
 
   if (response.status === statusCodes.HTTP_STATUS_NO_CONTENT) {
@@ -107,7 +110,7 @@ async function initiateContextUpload (runId, requestPayload) {
     throw error
   }
 
-  return await response.json()
+  return response.json()
 }
 
 export {

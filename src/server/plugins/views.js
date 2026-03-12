@@ -21,7 +21,6 @@ const nunjucksEnvironment = nunjucks.configure(
   }
 )
 
-// Add custom filters
 nunjucksEnvironment.addFilter('dateFilter', (date) => {
   if (!date) {
     return ''

@@ -20,13 +20,15 @@ const mockContexts = {
       id: 'ctx-001',
       filename: 'document.pdf',
       status: 'complete',
-      uploadedAt: '2026-03-09T10:15:00Z'
+      uploadedAt: '2026-03-09T10:15:00Z',
+      createdAt: '2026-03-09T10:15:00Z'
     },
     {
       id: 'ctx-002',
       filename: 'reference.doc',
       status: 'complete',
-      uploadedAt: '2026-03-09T10:20:00Z'
+      uploadedAt: '2026-03-09T10:20:00Z',
+      createdAt: '2026-03-09T10:20:00Z'
     }
   ]
 }
