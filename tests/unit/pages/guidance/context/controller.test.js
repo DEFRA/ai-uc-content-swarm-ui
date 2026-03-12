@@ -1,8 +1,9 @@
+import { constants as statusCodes } from 'node:http2'
+
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest'
 
-import * as runsApi from '../../../../../../src/infra/api/runtime.js'
-import { handleValidationError } from '../../../../../../src/pages/guidance/context/controller.js'
-import { statusCodes } from '../../../../../../src/constants/status-codes.js'
+import * as runsApi from '../../../../../src/infra/api/runtime.js'
+import { handleValidationError } from '../../../../../src/pages/guidance/context/controller.js'
 
 describe('context controller - handleValidationError', () => {
   beforeEach(() => {

@@ -1,4 +1,5 @@
 import { config } from '../../config/config.js'
+import { statusCodes } from '../../constants/status-codes.js'
 
 const runtimeUrl = config.get('runtime.url')
 
@@ -71,6 +72,10 @@ async function getRunContexts (runId) {
 
   if (!response.ok) {
     throw new Error(`Failed to get run contexts: ${response.statusText}`)
+  }
+
+  if (response.status === statusCodes.HTTP_STATUS_NO_CONTENT) {
+    return []
   }
 
   return response.json()

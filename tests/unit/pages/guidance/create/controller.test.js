@@ -1,7 +1,8 @@
+import { constants as statusCodes } from 'node:http2'
+
 import { describe, test, expect, vi } from 'vitest'
 
-import { handleValidationError } from '../../../../../../src/pages/guidance/create/controller.js'
-import { statusCodes } from '../../../../../../src/constants/status-codes.js'
+import { handleValidationError } from '../../../../../src/pages/guidance/create/controller.js'
 
 describe('create controller - handleValidationError', () => {
   test('throws non-Joi errors', () => {
