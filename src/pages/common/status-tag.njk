@@ -1,0 +1,26 @@
+{#
+  Macro: contextStatus
+  Renders a GOV.UK style tag for a context document status.
+
+  Usage:
+    {% from "common/status-tag.njk" import contextStatus %}
+    {{ contextStatus(context.status) }}
+
+  Supported statuses:
+    - pending
+    - rejected
+    - complete
+#}
+
+{% macro contextStatus(status) %}
+  {%- set s = (status or '') | lower -%}
+  {%- if s == 'complete' -%}
+    <span class="govuk-tag govuk-tag--green">{{ 'complete' | capitalize }}</span>
+  {%- elif s == 'rejected' -%}
+    <span class="govuk-tag govuk-tag--red">{{ 'rejected' | capitalize }}</span>
+  {%- elif s == 'pending' -%}
+    <span class="govuk-tag">{{ 'pending' | capitalize }}</span>
+  {%- else -%}
+    <span class="govuk-tag">{{ s | upper }}</span>
+  {%- endif -%}
+{% endmacro %}

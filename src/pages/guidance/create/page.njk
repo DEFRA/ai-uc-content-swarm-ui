@@ -1,0 +1,67 @@
+{% extends "common/layout.njk" %}
+
+{% block title %}
+  <title>Create a new draft run - {{ serviceName }}</title>
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Create a new draft run</h1>
+
+        {% if errors %}
+          <div class="govuk-error-summary" data-module="govuk-error-summary">
+            <div class="govuk-error-summary__body">
+              <ul class="govuk-list govuk-error-summary__list">
+                {% if errors.global %}
+                  <li>
+                    <a href="#run-name-error">{{ errors.global }}</a>
+                  </li>
+                {% endif %}
+                {% if errors.runName %}
+                  <li>
+                    <a href="#run-name-error">{{ errors.runName }}</a>
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        {% endif %}
+
+        <form method="post" action="/guidance/new" novalidate>
+          <div class="govuk-form-group {% if errors.runName %}govuk-form-group--error{% endif %}">
+            <label class="govuk-label govuk-label--l" for="run-name">
+              <span class="govuk-visually-hidden">Run name</span>
+              Run name
+            </label>
+            <div class="govuk-hint" id="run-name-hint">
+              Give your draft run a clear, descriptive name so you can identify it later
+            </div>
+            {% if errors.runName %}
+              <p class="govuk-error-message" id="run-name-error">
+                <span class="govuk-visually-hidden">Error:</span>
+                {{ errors.runName }}
+              </p>
+            {% endif %}
+            <input
+              class="govuk-input {% if errors.runName %}govuk-input--error{% endif %}"
+              id="run-name"
+              name="runName"
+              type="text"
+              spellcheck="false"
+              aria-describedby="run-name-hint{% if errors.runName %} run-name-error{% endif %}"
+              value="{{ request.payload.runName or '' }}"
+            />
+          </div>
+
+          <button type="submit" class="govuk-button" data-module="govuk-button">
+            Continue
+          </button>
+
+          <p class="govuk-body">
+            <a href="/" class="govuk-link">Cancel</a>
+          </p>
+        </form>
+      </div>
+    </div>
+{% endblock %}

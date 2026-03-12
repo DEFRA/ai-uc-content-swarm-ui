@@ -72,7 +72,7 @@ async function createServer () {
     options: loggerOptions
   })
 
-  await server.register([
+  const plugins = [
     userAgentProtection, // needs to be registered before Scooter to intercept User-Agent header early
     requestTracing,
     metrics,
@@ -80,12 +80,18 @@ async function createServer () {
     pulse,
     sessionCache,
     Scooter,
-    contentSecurityPolicy,
     HapiInert,
     serveStaticFiles,
     viewPlugin,
     router
-  ])
+  ]
+
+  // Only enable the content security policy in non-development environments
+  if (!config.get('isDevelopment')) {
+    plugins.push(contentSecurityPolicy)
+  }
+
+  await server.register(plugins)
 
   server.ext('onPreResponse', catchAll)
 

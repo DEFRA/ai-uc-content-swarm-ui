@@ -220,6 +220,22 @@ const config = convict({
       default: 'x-cdp-request-id',
       env: 'TRACING_HEADER'
     }
+  },
+  runtime: {
+    url: {
+      doc: 'Runtime service base URL',
+      format: String,
+      default: 'http://localhost:8085',
+      env: 'RUNTIME_URL'
+    }
+  },
+  uploader: {
+    url: {
+      doc: 'CDP uploader base URL',
+      format: String,
+      default: 'http://localhost:7337',
+      env: 'UPLOADER_URL'
+    }
   }
 })
 
