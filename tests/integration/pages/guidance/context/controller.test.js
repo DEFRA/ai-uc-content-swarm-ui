@@ -3,14 +3,14 @@ import { constants as statusCodes } from 'node:http2'
 import nock from 'nock'
 import { beforeEach, afterEach } from 'vitest'
 
-import { createServer } from '../../../../src/server/server.js'
-import { setupNock, teardownNock } from '../../../mocks/nock-setup.js'
-import { mockUploadSession, mockRuns } from '../../../mocks/runtime-api.js'
-import { config } from '../../../../src/config/config.js'
+import { createServer } from '../../../../../src/server/server.js'
+import { setupNock, teardownNock } from '../../../../mocks/nock-setup.js'
+import { mockUploadSession, mockRuns } from '../../../../mocks/runtime-api.js'
+import { config } from '../../../../../src/config/config.js'
 
 const runtimeUrl = config.get('runtime.url')
 
-describe('Guidance Page', () => {
+describe('Guidance Context Page', () => {
   let server
 
   beforeAll(async () => {
