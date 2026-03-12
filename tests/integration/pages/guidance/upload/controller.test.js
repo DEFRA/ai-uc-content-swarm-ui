@@ -56,7 +56,7 @@ describe('Guidance Upload Form Page', () => {
       })
 
       expect(statusCode).toBe(statusCodes.HTTP_STATUS_FOUND)
-      expect(headers.location).toContain(`/guidance/${runId}/metadata`)
+      expect(headers.location).toContain(`/guidance/${runId}/upload/metadata`)
     })
   })
 })
