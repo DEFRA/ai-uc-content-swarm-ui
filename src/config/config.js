@@ -225,7 +225,8 @@ const config = convict({
     url: {
       doc: 'Runtime service base URL',
       format: String,
-      default: 'http://localhost:8085',
+      nullable: true,
+      default: null,
       env: 'RUNTIME_URL'
     }
   },
@@ -233,7 +234,8 @@ const config = convict({
     url: {
       doc: 'CDP uploader base URL',
       format: String,
-      default: 'http://localhost:7337',
+      nullable: true,
+      default: null,
       env: 'UPLOADER_URL'
     }
   }

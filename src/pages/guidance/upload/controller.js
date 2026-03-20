@@ -17,15 +17,19 @@ async function showUploadForm (request, h) {
   const { uploadId: queryUploadId } = request.query
 
   if (!queryUploadId) {
-    return h.redirect(`/guidance/${runId}/metadata`)
+    return h.redirect(`/guidance/${runId}/upload/metadata`)
       .code(statusCodes.HTTP_STATUS_FOUND)
   }
 
   const run = await runsApi.getRun(runId)
   const uploaderBase = config.get('uploader.url')
-  const uploadAction = `${uploaderBase}/upload-and-scan/${queryUploadId}`
+
+  const uploadAction = uploaderBase
+    ? `${uploaderBase}/upload-and-scan/${queryUploadId}`
+    : `/upload-and-scan/${queryUploadId}`
 
   const viewData = createUploadViewModel({ run, uploadAction })
+
   return h.view('guidance/upload/upload', viewData)
     .code(statusCodes.HTTP_STATUS_OK)
 }
