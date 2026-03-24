@@ -3,7 +3,8 @@ import {
   createRun,
   getRun,
   getRunContexts,
-  initiateContextUpload
+  initiateContextUpload,
+  startRun
 } from '../../../../src/infra/api/runtime.js'
 import * as runsApi from '../../../../src/infra/api/runtime.js'
 
@@ -66,6 +67,17 @@ describe('src/infra/api/runtime.js - unhappy / 204 cases', () => {
     })
 
     await expect(initiateContextUpload('run-1', { redirect: null })).rejects.toMatchObject({ statusCode: 400 })
+  })
+
+  it('startRun throws and sets statusCode on non-ok response', async () => {
+    global.fetch.mockResolvedValue({
+      ok: false,
+      status: 404,
+      statusText: 'Not Found',
+      json: async () => ({})
+    })
+
+    await expect(startRun('run-1', {})).rejects.toMatchObject({ statusCode: 404 })
   })
 })
 
@@ -165,6 +177,106 @@ describe('Runtime API', () => {
       } catch (error) {
         expect(error.message).toContain('Failed to get run')
         expect(error.statusCode).toBe(404)
+      }
+    })
+  })
+
+  describe('startRun', () => {
+    test('Should call POST /runs/:id/start with task payload', async () => {
+      const mockResponse = {
+        ok: true,
+        json: vi.fn().mockResolvedValue({
+          id: 'run-123',
+          name: 'Test Run',
+          status: 'pending',
+          task: 'generate guidance'
+        })
+      }
+      global.fetch.mockResolvedValueOnce(mockResponse)
+
+      const result = await runsApi.startRun('run-123', { task: 'generate guidance' })
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('/runs/run-123/start'),
+        expect.objectContaining({
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        })
+      )
+      expect(result.id).toBe('run-123')
+      expect(result.status).toBe('pending')
+    })
+
+    test('Should handle startRun with empty payload', async () => {
+      const mockResponse = {
+        ok: true,
+        json: vi.fn().mockResolvedValue({
+          id: 'run-456',
+          name: 'Another Run',
+          status: 'pending'
+        })
+      }
+      global.fetch.mockResolvedValueOnce(mockResponse)
+
+      const result = await runsApi.startRun('run-456', {})
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('/runs/run-456/start'),
+        expect.objectContaining({
+          method: 'POST'
+        })
+      )
+      expect(result.status).toBe('pending')
+    })
+
+    test('Should throw error with statusCode on 404 response', async () => {
+      const mockResponse = {
+        ok: false,
+        status: 404,
+        statusText: 'Not Found'
+      }
+      global.fetch.mockResolvedValueOnce(mockResponse)
+
+      try {
+        await runsApi.startRun('unknown-run', {})
+        expect.fail('Should have thrown an error')
+      } catch (error) {
+        expect(error.message).toContain('Failed to start run')
+        expect(error.statusCode).toBe(404)
+      }
+    })
+
+    test('Should throw error with statusCode on 400 response', async () => {
+      const mockResponse = {
+        ok: false,
+        status: 400,
+        statusText: 'Bad Request'
+      }
+      global.fetch.mockResolvedValueOnce(mockResponse)
+
+      try {
+        await runsApi.startRun('run-123', {})
+        expect.fail('Should have thrown an error')
+      } catch (error) {
+        expect(error.message).toContain('Failed to start run')
+        expect(error.statusCode).toBe(400)
+      }
+    })
+
+    test('Should throw error with statusCode on 500 response', async () => {
+      const mockResponse = {
+        ok: false,
+        status: 500,
+        statusText: 'Internal Server Error'
+      }
+      global.fetch.mockResolvedValueOnce(mockResponse)
+
+      try {
+        await runsApi.startRun('run-123', {})
+        expect.fail('Should have thrown an error')
+      } catch (error) {
+        expect(error.message).toContain('Failed to start run')
+        expect(error.statusCode).toBe(500)
       }
     })
   })

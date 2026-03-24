@@ -113,9 +113,39 @@ async function initiateContextUpload (runId, requestPayload) {
   return response.json()
 }
 
+/**
+ * Start a run by calling the runtime API
+ *
+ * @param {string} runId - The ID of the run to start
+ * @param {Object} requestPayload - The start request payload
+ * @param {string|null} requestPayload.task - Optional task override for the run
+ *
+ * @returns {Promise<Object>} The updated run object with status=PENDING
+ * @throws {Error} If the API call fails
+ */
+async function startRun (runId, requestPayload) {
+  const response = await fetch(`${runtimeUrl}/runs/${runId}/start`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(requestPayload)
+  })
+
+  if (!response.ok) {
+    const error = new Error(`Failed to start run: ${response.statusText}`)
+    error.statusCode = response.status
+
+    throw error
+  }
+
+  return response.json()
+}
+
 export {
   createRun,
   getRun,
   getRunContexts,
-  initiateContextUpload
+  initiateContextUpload,
+  startRun
 }
