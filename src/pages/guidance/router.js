@@ -4,6 +4,7 @@ import * as setupController from './setup/controller.js'
 import * as contextController from './context/controller.js'
 import { metadataSchema } from './context/schema.js'
 import * as uploadController from './upload/controller.js'
+import * as statusController from './status/controller.js'
 
 const routes = [
   {
@@ -47,6 +48,11 @@ const routes = [
     method: 'GET',
     path: '/guidance/{runId}/upload',
     handler: uploadController.showUploadForm
+  },
+  {
+    method: 'GET',
+    path: '/guidance/{runId}/status',
+    handler: statusController.showStatus
   }
 ]
 
