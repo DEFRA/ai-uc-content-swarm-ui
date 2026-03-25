@@ -1,5 +1,3 @@
-import { Boom } from '@hapi/boom'
-
 import { statusCodes } from '../../../constants/status-codes.js'
 
 import * as runsApi from '../../../infra/api/runtime.js'
@@ -36,14 +34,10 @@ async function showSetup (request, h) {
 async function start (request, h) {
   const { runId } = request.params
 
-  try {
-    await runsApi.startRun(runId, {})
+  await runsApi.startRun(runId)
 
-    return h.redirect(`/guidance/${runId}/setup`)
-      .code(statusCodes.HTTP_STATUS_FOUND)
-  } catch (error) {
-    throw Boom.internal('Failed to start run', error)
-  }
+  return h.redirect(`/guidance/${runId}/setup`)
+    .code(statusCodes.HTTP_STATUS_FOUND)
 }
 
 export {
