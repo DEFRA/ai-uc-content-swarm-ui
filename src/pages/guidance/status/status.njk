@@ -9,50 +9,23 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">{{ run.name }}</h1>
-
-        <h2 class="govuk-heading-m">Supporting Context</h2>
-
-        {% if contexts.length > 0 %}
-          <h3 class="govuk-heading-s">Uploaded</h3>
-          <div class="govuk-inset-text">
-            <table class="govuk-table">
-              <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                  <th scope="col" class="govuk-table__header">Title</th>
-                  <th scope="col" class="govuk-table__header">Type</th>
-                  <th scope="col" class="govuk-table__header">Uploaded</th>
-                  <th scope="col" class="govuk-table__header">Status</th>
-                </tr>
-              </thead>
-              <tbody class="govuk-table__body">
-                {% for context in contexts %}
-                  <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">
-                      <code>{{ context.title }}</code>
-                    </td>
-                    <td class="govuk-table__cell">
-                      {{ context.contentType }}
-                    </td>
-                    <td class="govuk-table__cell">
-                      {{ context.createdAt | dateFilter }}
-                    </td>
-                    <td class="govuk-table__cell">
-                      {{ contextStatus(context.status) }}
-                    </td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        {% else %}
-          <p class="govuk-body">
-            <em>No context uploaded yet.</em>
-          </p>
-        {% endif %}
-
+          <h2 class="govuk-heading-m">Settings</h2>
+            <dl class="govuk-summary-list">
+              <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+              Run name
+              </dt>
+                <dd class="govuk-summary-list__value">
+                {{ run.name }}
+                </dd>
+                <dd class="govuk-summary-list__value">
+                {{ contextStatus(run.status) }}
+                </dd>
+              </div>
+            </dl>
         {% if allComplete %}
-          <a href="          npm installdance/{{ run.id }}/setup" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
-            Create draft
+          <a href="/guidance/{{ run.id }}/draft" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
+            Download output
           </a>
         {% endif %}
 
