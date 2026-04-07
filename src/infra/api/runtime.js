@@ -114,23 +114,26 @@ async function initiateContextUpload (runId, requestPayload) {
 }
 
 /**
- * Execute a run to generate AI-assisted guidance
+ * Start a run by calling the runtime API
  *
- * @param {string} runId - The ID of the run to execute
+ * @param {string} runId - The ID of the run to start
+ * @param {Object} requestPayload - The start request payload
+ * @param {string|null} requestPayload.task - Optional task override for the run
  *
- * @returns {Promise<Object>} The execution response
+ * @returns {Promise<Object>} The updated run object with status=PENDING
  * @throws {Error} If the API call fails
  */
-async function executeRun (runId) {
-  const response = await fetch(`${runtimeUrl}/runs/${runId}/execute`, {
+async function startRun (runId, requestPayload) {
+  const response = await fetch(`${runtimeUrl}/runs/${runId}/start`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
-    }
+    },
+    body: JSON.stringify(requestPayload)
   })
 
   if (!response.ok) {
-    const error = new Error(`Failed to execute run: ${response.statusText}`)
+    const error = new Error(`Failed to start run: ${response.statusText}`)
     error.statusCode = response.status
 
     throw error
@@ -144,5 +147,5 @@ export {
   getRun,
   getRunContexts,
   initiateContextUpload,
-  executeRun
+  startRun
 }

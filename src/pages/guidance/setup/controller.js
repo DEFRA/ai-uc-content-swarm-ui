@@ -23,6 +23,24 @@ async function showSetup (request, h) {
     .code(statusCodes.HTTP_STATUS_OK)
 }
 
+/**
+ * Start a run by calling the runtime API
+ *
+ * @param {import('@hapi/hapi').Request} request - Hapi request object with runId param
+ * @param {import('@hapi/hapi').ResponseToolkit} h - Hapi response toolkit
+ *
+ * @returns {import('@hapi/hapi').ResponseObject} Redirect to setup page on success
+ */
+async function start (request, h) {
+  const { runId } = request.params
+
+  await runsApi.startRun(runId)
+
+  return h.redirect(`/guidance/${runId}/setup`)
+    .code(statusCodes.HTTP_STATUS_FOUND)
+}
+
 export {
-  showSetup
+  showSetup,
+  start
 }
