@@ -76,9 +76,11 @@
           <p class="govuk-body">
             When you have added all supporting context, you can execute the draft run to generate initial AI-assisted guidance.
           </p>
-          <button type="button" class="govuk-button" data-module="govuk-button">
-            Execute run
-          </button>
+          <form method="POST" action="/guidance/{{ run.id }}/start">
+            <button type="submit" class="govuk-button" data-module="govuk-button">
+              Execute run
+            </button>
+          </form>
         </div>
 
         <p class="govuk-body govuk-!-margin-top-9">

@@ -28,6 +28,11 @@ const routes = [
     handler: setupController.showSetup
   },
   {
+    method: 'POST',
+    path: '/guidance/{runId}/start',
+    handler: setupController.start
+  },
+  {
     method: 'GET',
     path: '/guidance/{runId}/upload/metadata',
     handler: contextController.showContextForm
