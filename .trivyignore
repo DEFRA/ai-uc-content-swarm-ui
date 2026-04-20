@@ -7,34 +7,3 @@
 # CVE-2021-12345 exp:2023-12-31
 #
 # See https://trivy.dev/docs/latest/configuration/filtering/#trivyignore
-
-# @hapi/content - Regular Expression Denial of Service (ReDoS) - Transitive dependency of @hapi/hapi
-# Reason: New version of @hapi/hapi (21.4.8) released with fix for this vulnerability but doesn't meet 7 day cooldown requirement. Waiting for 7 day cooldown to expire before updating @hapi/hapi to 21.4.8.
-# Created: 2026-04-07
-# Expires: 2026-04-10
-CVE-2026-35213 exp:2026-04-10
-
-# lodash - Arbitrary code execution - Transitive dependency
-# Reason: New version of lodash (4.18.1) released with fix for this vulnerability but doesn't meet 7 day cooldown requirement. Waiting for 7 day cooldown to expire before updating lodash to 4.18.1.
-# Created: 2026-04-07
-# Expires: 2026-04-09
-CVE-2026-4800 exp:2026-04-09
-
-# Lodash - Prototype Pollution - Transitive dependency
-# Reason: New version of lodash (4.18.1) released with fix for this vulnerability but doesn't meet 7 day cooldown requirement. Waiting for 7 day cooldown to expire before updating
-# Created: 2026-04-07
-# Expires: 2026-04-09
-CVE-2026-2950 exp:2026-04-09
-
-# vite - Arbitrary code execution via dev server - Transitive dependency of vitest
-# Reason: New version of vite (4.1.3) released with fix for this vulnerability but doesn't meet 7 day cooldown requirement. Waiting for 7 day cooldown to expire before updating vite to 4.1.3.
-# Created: 2026-04-07
-# Expires: 2026-04-14
-CVE-2026-39363 exp:2026-04-14
-GHSA-v2wj-q39q-566r exp:2026-04-14
-
-# vite - path traversal vulnerability in dev server - Transitive dependency of vitest
-# Reason: New version of vite (4.1.3) released with fix for this
-# Created: 2026-04-07
-# Expires: 2026-04-14
-GHSA-4w7w-66w2-5vf9 exp:2026-04-14
