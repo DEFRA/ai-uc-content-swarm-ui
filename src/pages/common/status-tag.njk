@@ -4,7 +4,7 @@
 
   Usage:
     {% from "common/status-tag.njk" import contextStatus %}
-    {{ contextStatus(context.status) }}
+    {{ contextStatus(context.cdpUploader.status or 'pending') }}
 
   Supported statuses:
     - pending
