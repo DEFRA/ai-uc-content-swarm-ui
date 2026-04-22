@@ -1,0 +1,37 @@
+{% extends "common/layout.njk" %}
+
+{% block title %}
+  <title>Review: {{ run.name }} - {{ serviceName }}</title>
+{% endblock %}
+
+{% from "common/status-tag.njk" import contextStatus %}
+{% block content %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">{{ run.name }}</h1>
+          <h2 class="govuk-heading-m">Settings</h2>
+            <dl class="govuk-summary-list">
+              <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+              Run name
+              </dt>
+                <dd class="govuk-summary-list__value">
+                {{ run.name }}
+                </dd>
+                <dd class="govuk-summary-list__value">
+                {{ contextStatus(run.status) }}
+                </dd>
+              </div>
+            </dl>
+        {% if allComplete %}
+          <a href="/guidance/{{ run.id }}/draft" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
+            Download output
+          </a>
+        {% endif %}
+
+        <p class="govuk-body govuk-!-margin-top-4">
+          <a href="/guidance/{{ run.id }}/setup" class="govuk-link">Back to setup</a>
+        </p>
+      </div>
+    </div>
+{% endblock %}
